@@ -74,8 +74,8 @@ function removeTweetListener(ctx, params)
     }
     else
     {
-        currentTweetDB.delete(usernameToRemove);
-        tweetCaller.getTweetsForUser(usernameToRemove,retrieveTweetResult);
+        currentTweetDB[usernameToRemove] = null;
+        ctx.reply("removal of " + usernameToRemove + " successful");
     }
 }
 
@@ -117,6 +117,11 @@ function sayToChat(ctx, params)
 
 function retrieveTweetResult(username, results)
 {
+    if(currentTweetDB[username] == null)
+    {
+        currentTweetDB[username] = {};
+    }
+    
     var currentKnownTweets = currentTweetDB[username];
     for(let i = 0; i < results.length; i++)
     {
@@ -137,7 +142,6 @@ function retrieveTweetResult(username, results)
             displayTweet(username,currentTweetObj.text);
         }
     }
-    
     currentTweetDB[username] = results;
     writeData();
 }
